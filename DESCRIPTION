@@ -1,0 +1,12 @@
+Package: loopcity
+Type: Package
+Title: Call Chromatin Communities From Hi-C Data
+Version: 0.1.0
+Authors@R: person("Sarah", "Parker", role = c("aut", "cre"),
+      email = "smp3800@gmail.com",
+      comment = c(ORCID = "0000-0002-2700-3979")
+Description: Tools for assigning and visualizing chromatin communities 
+    to interactions from Hi-C data
+License: GPL-3
+Encoding: UTF-8
+  
