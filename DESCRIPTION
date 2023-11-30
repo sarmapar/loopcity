@@ -12,3 +12,17 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
+Imports: 
+    data.table,
+    dplyr,
+    glue,
+    igraph,
+    InteractionSet,
+    IRanges,
+    mariner,
+    rlang,
+    stats
+Depends: 
+    R (>= 2.10)
+LazyData: true
+URL: http://www.sarmapar.com/loopcity/
