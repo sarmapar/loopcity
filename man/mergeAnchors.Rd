@@ -15,6 +15,9 @@
 mergeAnchors(loops, pixelOverlap, dropDups = T)
 }
 \description{
+@export
+}
+\details{
 @examples
  # example code
 }
