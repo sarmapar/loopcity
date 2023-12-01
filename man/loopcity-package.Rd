@@ -8,6 +8,13 @@
 \description{
 Tools for assigning and visualizing chromatin community interactions from Hi-C data.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{http://www.sarmapar.com/loopcity/}
+}
+
+}
 \author{
 \strong{Maintainer}: Sarah Parker \email{smp3800@gmail.com} (\href{https://orcid.org/0000-0002-2700-3979}{ORCID})
 
