@@ -8,6 +8,8 @@
 #'  @param dropDups logical determining whether duplicates should be dropped
 #'  from output
 #'
+#'  @export
+#'
 #'  @examples
 #'  # example code
 #'
