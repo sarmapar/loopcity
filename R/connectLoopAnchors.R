@@ -12,6 +12,8 @@
 #'
 #' connectLoopAnchors(mergedLoops, 1e6)
 connectLoopAnchors <- function(loops, overlapDist){
+    ## Suppress NSE notes in R CMD check
+    queryHits <- subjectHits <- NULL
 
     ## Only include anchors used in the GInteractions object
     anchors <- InteractionSet::reduceRegions(loops) |>

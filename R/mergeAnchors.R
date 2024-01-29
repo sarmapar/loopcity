@@ -15,6 +15,10 @@
 #'
 
 mergeAnchors <- function(loops, pixelOverlap, dropDups = T){
+    ## Suppress NSE notes in R CMD check
+    subjectHits <- queryHits <- V1 <- anchorId <- overlapIds <- NULL
+    sameGroup <- group <- count <- NULL
+
     ## Only include anchors used in the GInteractions object
     loops <- InteractionSet::reduceRegions(loops)
 
