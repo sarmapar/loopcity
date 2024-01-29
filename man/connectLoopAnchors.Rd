@@ -18,3 +18,8 @@ GInteractions object
 \description{
 connectLoopAnchors
 }
+\examples{
+mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1)
+
+connectLoopAnchors(mergedLoops, 1e6)
+}
