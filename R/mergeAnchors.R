@@ -30,7 +30,7 @@ mergeAnchors <- function(loops, pixelOverlap, dropDups = T){
         unique()-1
 
     if(length(resolution) > 1){
-        rlang::abort(c("Interaction ranges must have the same width ",
+        rlang::abort(glue("Interaction ranges must have the same width ",
                        "to use pixelOverlap.",
                 "x"=glue("There are {length(resolution)} different widths ",
                          "in `ranges(regions(loops))`."),
