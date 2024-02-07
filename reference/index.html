@@ -52,6 +52,11 @@
         <dd>Assign communities to interactions</dd>
       </dl><dl><dt>
           
+          <code><a href="calcLoopEnrichment.html">scoreInteractions()</a></code> 
+        </dt>
+        <dd>Calculate loop enrichment over background.</dd>
+      </dl><dl><dt>
+          
           <code><a href="connectLoopAnchors.html">connectLoopAnchors()</a></code> 
         </dt>
         <dd>connectLoopAnchors</dd>
@@ -60,19 +65,12 @@
           <code><a href="mergeAnchors.html">mergeAnchors()</a></code> 
         </dt>
         <dd>Merge neighboring loop anchor positions into one
- representative anchor.
- @param loops GInteractions object of loops from Hi-C data
- @param pixelOverlap numeric representing the number of
- pixels away from an anchor is considered to be overlapping
- For example, `pixelOverlap = 1` means only immediately neighboring pixels
- will be merged and `pixelOverlap = 2` means all anchors within 2 pixels
- @param dropDups logical determining whether duplicates should be dropped
- from output</dd>
+ representative anchor.</dd>
       </dl><dl><dt>
           
-          <code><a href="scoreInteractions.html">scoreInteractions()</a></code> 
+          <code><a href="scoreInteractions.html">scoreInteractions(<i>&lt;GInteractions&gt;</i>,<i>&lt;character&gt;</i>)</a></code> 
         </dt>
-        <dd>Score loop count using enrichment of foreground over background</dd>
+        <dd>Score loop counts using enrichment of foreground over background</dd>
       </dl></div>
   </main></div>
 

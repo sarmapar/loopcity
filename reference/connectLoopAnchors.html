@@ -63,6 +63,15 @@ to make a connection</p></dd>
 <p>GInteractions object</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mergedLoops</span> <span class="op">&lt;-</span> <span class="fu"><a href="mergeAnchors.html">mergeAnchors</a></span><span class="op">(</span><span class="va">GM12878_10KbLoops</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'reduceRegions': object 'GM12878_10KbLoops' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">connectLoopAnchors</span><span class="op">(</span><span class="va">mergedLoops</span>, <span class="fl">1e6</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'regions': error in evaluating the argument 'x' in selecting a method for function 'reduceRegions': object 'mergedLoops' not found</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
