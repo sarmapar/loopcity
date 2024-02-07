@@ -4,7 +4,7 @@
 \alias{assignCommunities}
 \title{Assign communities to interactions}
 \usage{
-assignCommunities(loops, score = loops$score, clusterType = "fast_greedy")
+assignCommunities(loops, score = loops$score, clusterType = "leiden")
 }
 \arguments{
 \item{loops}{GInteractions object of interactions to include in the network}
@@ -14,11 +14,14 @@ if `loops` contains a column named 'score', this column will be used}
 
 \item{clusterType}{character vector of length 1 containing a keyword
 for the clustering algorithm to use. Must be one of "fast_greedy",
-"walktrap", "leiden", "infomap", "labelprop", or "edge_between"}
+"walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"}
 }
 \value{
 GInteractions object with community metadata
 }
 \description{
 Assign communities to interactions
+}
+\examples{
+# Add example
 }
