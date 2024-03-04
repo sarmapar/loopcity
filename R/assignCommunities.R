@@ -24,13 +24,13 @@ assignCommunities <- function(loops,
                          weights = loops$score)
   relations[is.na(relations)] <- 0
 
-  g <- igraph::graph.data.frame(relations,
+  g <- igraph::graph_from_data_frame(relations,
                                 directed=FALSE,
                                 vertices=unique(c(anc[[2]],anc[[1]])))
 
   ## assign anchors to communities
   # remove edges with 0
-  g_filter <- igraph::delete.edges(g, which(relations$weights <= 0))
+  g_filter <- igraph::delete_edges(g, which(relations$weights <= 0))
   relations_filter <- dplyr::filter(relations, weights > 0)
 
   ## generate communities using chosen algorithm
