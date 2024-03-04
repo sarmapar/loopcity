@@ -13,9 +13,9 @@
 #' # Add example
 assignCommunities <- function(loops,
                               score = loops$score,
-                              clusterType = "leiden") {
+                              clusterType = "leiden",
+                              leiden_resolution = 0.01) {
 
-browser()
   ## make network
   anc <- InteractionSet::anchors(loops, type="both", id=TRUE)
 
@@ -49,7 +49,7 @@ browser()
            leiden = igraph::cluster_leiden(g_filter,
                                    weights = relations_filter$weights,
                                    objective_function = "CPM",
-                                   resolution_parameter = 0.01,
+                                   resolution_parameter = leiden_resolution,
                                    n_iterations = 5),
            infomap = igraph::cluster_infomap(g_filter,
                                      e.weights = relations_filter$weights),
