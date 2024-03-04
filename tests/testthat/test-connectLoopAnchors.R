@@ -7,8 +7,6 @@ test_that("overlaps the correct distance", {
                                             anchor2 = c(8,10,8),
                                             regions = regions5k)
 
-    connectLoopAnchors(inters, 11e3)
-
     expected <- InteractionSet::GInteractions(anchor1 = c(1,3,5,8),
                                               anchor2 = c(3,5,8,10),
                                               regions = regions5k) |>
