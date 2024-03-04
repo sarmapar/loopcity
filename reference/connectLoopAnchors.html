@@ -66,10 +66,25 @@ to make a connection</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">mergedLoops</span> <span class="op">&lt;-</span> <span class="fu"><a href="mergeAnchors.html">mergeAnchors</a></span><span class="op">(</span><span class="va">GM12878_10KbLoops</span>, <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'reduceRegions': object 'GM12878_10KbLoops' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">connectLoopAnchors</span><span class="op">(</span><span class="va">mergedLoops</span>, <span class="fl">1e6</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'regions': error in evaluating the argument 'x' in selecting a method for function 'reduceRegions': object 'mergedLoops' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> GInteractions object with 1523 interactions and 0 metadata columns:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          seqnames1           ranges1     seqnames2           ranges2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;Rle&gt;         &lt;IRanges&gt;         &lt;Rle&gt;         &lt;IRanges&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [1]        22 17400000-17410000 ---        22 17530000-17540000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [2]        22 17400000-17410000 ---        22 17650000-17660000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [3]        22 17400000-17410000 ---        22 17980000-17990000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [4]        22 17400000-17410000 ---        22 18310000-18320000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [5]        22 17530000-17540000 ---        22 17650000-17660000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      ...       ...               ... ...       ...               ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1519]        22 50930000-50940000 ---        22 51070000-51080000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1520]        22 50930000-50940000 ---        22 51130000-51140000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1521]        22 51050000-51060000 ---        22 51070000-51080000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1522]        22 51050000-51060000 ---        22 51130000-51140000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   [1523]        22 51070000-51080000 ---        22 51130000-51140000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   -------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   regions: 224 ranges and 0 metadata columns</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
