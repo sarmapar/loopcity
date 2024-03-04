@@ -13,6 +13,6 @@ test_that("scores are generated", {
   scores <- scoreInteractions(x = connections, hicFile = hicfile, norm = "NONE",
                     loopCalls = mergedLoops)
 
-  assignCommunities(interactions(scores))
+  assignCommunities(InteractionSet::interactions(scores))
 
 })
