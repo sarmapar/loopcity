@@ -1,36 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/404.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/index.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/assignCommunities.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/calcLoopEnrichment.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/connectLoopAnchors.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/loopcity-package.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/mergeAnchors.html</loc>
-  </url>
-  <url>
-    <loc>http://www.sarmapar.com/loopcity/reference/scoreInteractions.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://www.sarmapar.com/loopcity/404.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/LICENSE.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/authors.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/index.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/assignCommunities.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/calcLoopEnrichment.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/connectLoopAnchors.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/index.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/loopcity-package.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/mergeAnchors.html</loc></url>
+<url><loc>http://www.sarmapar.com/loopcity/reference/scoreInteractions.html</loc></url>
 </urlset>
+
