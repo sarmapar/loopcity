@@ -178,18 +178,55 @@ assignCommunities <- function(loops,
         as.numeric(names(igraph::membership(between_g)))] <-
         as.numeric(igraph::membership(between_g))
 
-    ## if both anchors of a loop are in the same community,
-    ## set the loop community
-    ## otherwise set loopCommunity to NA
+    ## check if nodes on borders of communities fit well in neighboring
+    ## communities based on scores
+    bordersLeft <- anchors |>
+        dplyr::group_by(anchorCommunity) |>
+        dplyr::slice_head(n = 1)
+
+    bordersRight <- anchors |>
+        dplyr::group_by(anchorCommunity) |>
+        dplyr::slice_tail(n = 1)
+
+    ## TODO replace for loop with map
+    communityNums <- unique(loops$loopCommunity) |>
+        na.omit() |>
+        as.numeric()
+
+    movement <- GenomicRanges::GRanges()
+    for(comm in communityNums){
+        nodeLeft <- bordersLeft |>
+            dplyr::filter(anchorCommunity == comm) |>
+            plyranges::as_granges()
+
+        nodeRight <- bordersRight |>
+            dplyr::filter(anchorCommunity == comm) |>
+            plyranges::as_granges()
+
+        ln <- .compareNodeToComm(loops, nodeLeft, T)
+        rn <- .compareNodeToComm(loops, nodeRight, F)
+
+        movement <- c(movement, ln, rn)
+    }
+
+    ## filter to only anchors that moved
+    movement <- movement[which(sapply(movement$anchorCommunity,
+                                      function(x) length(x) > 1))]
+
+    ## reassign anchor communities
+    overlaps <- InteractionSet::findOverlaps(movement,
+                                             InteractionSet::regions(loops))
+    InteractionSet::regions(loops)[subjectHits(overlaps)] <-
+        movement[queryHits(overlaps)]
+
+    ## set loop community to any communities shared by both anchors
     anchor1com <- InteractionSet::regions(loops)[
         InteractionSet::anchorIds(loops)$first]$anchorCommunity
     anchor2com <- InteractionSet::regions(loops)[
         InteractionSet::anchorIds(loops)$second]$anchorCommunity
 
     loops$loopCommunity <-
-        ifelse(anchor1com == anchor2com,
-               anchor1com,
-               NA)
+        mapply(function(x, y) intersect(x,y), anchor1com, anchor2com)
 
     return(loops)
 }
