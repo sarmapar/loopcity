@@ -6,6 +6,7 @@
 #' @param clusterType character vector of length 1 containing a keyword
 #'  for the clustering algorithm to use. Must be one of "fast_greedy",
 #'  "walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"
+#' @param pruneUnder
 #' @return GInteractions object with community metadata
 #'
 #' @importFrom rlang abort
@@ -17,7 +18,8 @@
 assignCommunities <- function(loops,
                               scores,
                               clusterType = "leiden",
-                              leiden_resolution = 0.01) {
+                              leiden_resolution = 0.01,
+                              pruneUnder) {
 
 ## Parameter checking ----------------------------------------------------------
     ## Check if loops is a GInteractions object, with helpful message for
@@ -25,13 +27,13 @@ assignCommunities <- function(loops,
     if(!is(loops,"GInteractions")){
         if(is(loops,"data.frame") | is(loops,"data.table") |
                                        is(loops,"DataFrame")){
-            abort(c("`loops` must be a `GInteractions` object",
+            rlang::abort(c("`loops` must be a `GInteractions` object",
                     x=glue("`class(loops)` is {class(loops)}"),
                     i=glue("See `mariner::as_ginteractions()` to convert",
                            " a data-frame-like object to",
                            " a GInteractions object")))
         } else {
-            abort(c("`loops` must be a `GInteractions` object",
+            rlang::abort(c("`loops` must be a `GInteractions` object",
                     x=glue("`class(loops)` is {class(loops)}")))
         }
     }
@@ -40,14 +42,14 @@ assignCommunities <- function(loops,
     if(missing(scores)){
         scores <- loops$score
         if(is.null(scores)){
-            abort(c(glue("argument `scores` is missing, and `loops` ",
+            rlang::abort(c(glue("argument `scores` is missing, and `loops` ",
                          "does not contain a column named `score`")))
         }
     } else if(!is(scores, "numeric")){
-        abort(c("`scores` must be a numeric vector",
+        rlang::abort(c("`scores` must be a numeric vector",
                 x = glue("`class(scores)` is {class(scores)}")))
     } else if(length(scores) != length(loops)){
-        abort(c("`scores` must be the same length as `loops`",
+        rlang::abort(c("`scores` must be the same length as `loops`",
                 x = glue("`length(scores)` is {length(scores)} and ",
                          "`length(loops)` is {length(loops)}")))
     }
@@ -56,7 +58,7 @@ assignCommunities <- function(loops,
     possibleClusterTypes <- c("fast_greedy","walktrap", "leiden", "infomap",
                               "label_prop", "edge_betweenness")
     if(!clusterType %in% possibleClusterTypes){
-        abort(c(glue("`clusterType`=\"{clusterType}\" is not a valid",
+        rlang::abort(c(glue("`clusterType`=\"{clusterType}\" is not a valid",
                      " clustering algorithm option"),
                 i=glue("`clusterType` must be one of \"",
                        glue_collapse({possibleClusterTypes}, sep ="\", \""),
@@ -65,7 +67,7 @@ assignCommunities <- function(loops,
 
     ## Check that leiden resolution is a numeric
     if(!is(leiden_resolution, "numeric")){
-        abort(c("`leiden_resolution` must be numeric",
+        rlang::abort(c("`leiden_resolution` must be numeric",
                 x=glue("`class(leiden_resolution)` is ",
                        "{class(leiden_resolution)}")))
     } else if(length(leiden_resolution) > 1){
@@ -83,6 +85,38 @@ assignCommunities <- function(loops,
         }
     }
 
+    #### Filter Scores -------------------------------------------------------------
+    ## calculate pruneUnder value if both original and added loops are present
+    ## in "source" column
+    if(missing(pruneUnder)){
+        if(!is.null(loops$source)){
+            subset <- split(loops, loops$source)
+            originalLoops <- subset$original
+            newLoops <- subset$added
+
+            lowerLimit <- median(newLoops$score)
+            upperLimit <- median(originalLoops$score)
+            ogLoopDensity <- density(as.numeric(originalLoops$score),
+                                     from = lowerLimit,
+                                     to = upperLimit,
+                                     n = 2^10)
+            newLoopDensity <- density(as.numeric(newLoops$score),
+                                      from = lowerLimit,
+                                      to = upperLimit,
+                                      n = 2^10)
+
+            densityDiff <- ogLoopDensity$y - newLoopDensity$y
+            intersectionPoint <- newLoopDensity$x[which(
+                diff(densityDiff > 0) != 0) + 1]
+
+            pruneUnder <- intersectionPoint
+        } else {
+            ## error if no value provided and no added loops
+            rlang::abort(c("`pruneUnder` must be provided since there is no
+                `source` column in `loops`",
+                    i=glue("Use a `pruneUnder` value of 0 to keep all loops.")))
+        }
+    }
 
 #### Build network -------------------------------------------------------------
     anc <- InteractionSet::anchors(loops, type="both", id=TRUE)
@@ -97,9 +131,9 @@ assignCommunities <- function(loops,
                                        vertices=unique(c(anc[[2]],anc[[1]])))
 
 #### assign anchors to communities----------------------------------------------
-    # remove edges with 0
-    g_filter <- igraph::delete_edges(g, which(relations$weights <= 0))
-    relations_filter <- dplyr::filter(relations, weights > 0)
+    # remove edges with scores less than pruneUnder
+    g_filter <- igraph::delete_edges(g, which(relations$weights <= pruneUnder))
+    relations_filter <- dplyr::filter(relations, weights > pruneUnder)
 
     ## generate communities using chosen algorithm
     if(clusterType == "edge_betweenness"){
@@ -139,6 +173,7 @@ assignCommunities <- function(loops,
                                                     directed = F)
         )
 
+#### adjust border nodes--------------------------------------------------------
     InteractionSet::regions(loops)$anchorCommunity[
         as.numeric(names(igraph::membership(between_g)))] <-
         as.numeric(igraph::membership(between_g))
