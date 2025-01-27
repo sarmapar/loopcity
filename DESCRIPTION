@@ -11,7 +11,7 @@ Encoding: UTF-8
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.2
 Imports: 
     BiocGenerics,
     data.table,
@@ -25,7 +25,8 @@ Imports:
     rlang,
     stats,
     pROC,
-    GenomeInfoDb
+    GenomeInfoDb,
+    clustAnalytics
 Depends: 
     R (>= 2.10)
 LazyData: true
