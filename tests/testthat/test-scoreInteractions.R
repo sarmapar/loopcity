@@ -13,6 +13,27 @@ test_that("scores are generated", {
   scores <- scoreInteractions(x = connections, hicFile = hicfile, norm = "NONE",
                     loopCalls = mergedLoops)
 
+
   assignCommunities(InteractionSet::interactions(scores))
 
 })
+
+
+test_that("loops with multiple widths are handled correctly", {
+    ## generate loops of various widths
+    regions5k <- GenomicRanges::GRanges(seqnames = "22",
+                                        IRanges::IRanges(seq(5e3,95e3,5e3),
+                                                         width = 5001))
+
+    regions10k <- GenomicRanges::GRanges(seqnames = "22",
+                                         IRanges::IRanges(seq(10e3,90e3,10e3),
+                                                          width = 10001))
+
+    loops <- c(InteractionSet::GInteractions(anchor1 = c(1,3),
+                                             anchor2 = c(7,9),
+                                             regions = regions5k),
+               InteractionSet::GInteractions(anchor1 = c(1,3),
+                                             anchor2 = c(7,9),
+                                             regions = regions10k))
+})
+
