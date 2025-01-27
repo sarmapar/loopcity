@@ -4,12 +4,17 @@
 \alias{assignCommunities}
 \title{Assign communities to interactions}
 \usage{
-assignCommunities(loops, score = loops$score, clusterType = "leiden")
+assignCommunities(
+  loops,
+  scores,
+  clusterType = "leiden",
+  leiden_resolution = 0.01
+)
 }
 \arguments{
 \item{loops}{GInteractions object of interactions to include in the network}
 
-\item{score}{a numeric vector of scores to use as edge weights,
+\item{scores}{a numeric vector of scores to use as edge weights,
 if `loops` contains a column named 'score', this column will be used}
 
 \item{clusterType}{character vector of length 1 containing a keyword
