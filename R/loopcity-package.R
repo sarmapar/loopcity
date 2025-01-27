@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @importFrom BiocGenerics %in%
+#' @importFrom clustAnalytics conductance
 #' @importFrom data.table :=
 #' @importFrom glue glue
 #' @importFrom InteractionSet regions
