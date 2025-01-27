@@ -35,5 +35,16 @@ connectLoopAnchors <- function(loops, overlapDist){
         InteractionSet::swapAnchors(mode = "order") |>
         unique()
 
+    ## Add source metadata to designate if interaction
+    ## was originally present or added
+    newInteractions$source <- "added"
+    originalIndexes <- IRanges::findOverlaps(loops, newInteractions) |>
+        as.data.frame() |>
+        dplyr::pull(subjectHits)
+
+    newInteractions$source[originalIndexes] <- "original"
+
     return(newInteractions)
 }
+
+
