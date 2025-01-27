@@ -90,12 +90,14 @@ assignCommunities <- function(loops,
     ## in "source" column
     if(missing(pruneUnder)){
         if(!is.null(loops$source)){
-            subset <- split(loops, loops$source)
+            tempLoops <- data.frame(source = loops$source,
+                                    score = scores)
+            subset <- split(tempLoops, tempLoops$source)
             originalLoops <- subset$original
             newLoops <- subset$added
 
-            lowerLimit <- median(newLoops$score)
-            upperLimit <- median(originalLoops$score)
+            lowerLimit <- quantile(newLoops$score, 0.4)
+            upperLimit <- quantile(originalLoops$score, 0.6)
             ogLoopDensity <- density(as.numeric(originalLoops$score),
                                      from = lowerLimit,
                                      to = upperLimit,
@@ -109,7 +111,14 @@ assignCommunities <- function(loops,
             intersectionPoint <- newLoopDensity$x[which(
                 diff(densityDiff > 0) != 0) + 1]
 
-            pruneUnder <- intersectionPoint
+            if(length(intersectionPoint) == 1){
+                pruneUnder <- intersectionPoint
+            } else{
+                rlang::warn(glue("Optimal pruning threshold could not be found",
+                                 "setting `pruneUnder` to 0."))
+                pruneUnder <- 0
+            }
+
         } else {
             ## error if no value provided and no added loops
             rlang::abort(c("`pruneUnder` must be provided since there is no
@@ -180,6 +189,8 @@ assignCommunities <- function(loops,
 
     ## check if nodes on borders of communities fit well in neighboring
     ## communities based on scores
+    anchors <- regions(loops) |> as.data.frame()
+
     bordersLeft <- anchors |>
         dplyr::group_by(anchorCommunity) |>
         dplyr::slice_head(n = 1)
@@ -210,14 +221,16 @@ assignCommunities <- function(loops,
     }
 
     ## filter to only anchors that moved
-    movement <- movement[which(sapply(movement$anchorCommunity,
-                                      function(x) length(x) > 1))]
+    if(length(movement) > 0){
+        movement <- movement[which(sapply(movement$anchorCommunity,
+                                          function(x) length(x) > 1))]
+    }
 
     ## reassign anchor communities
     overlaps <- InteractionSet::findOverlaps(movement,
                                              InteractionSet::regions(loops))
-    InteractionSet::regions(loops)[subjectHits(overlaps)] <-
-        movement[queryHits(overlaps)]
+    InteractionSet::regions(loops)[S4Vectors::subjectHits(overlaps)] <-
+        movement[S4Vectors::queryHits(overlaps)]
 
     ## set loop community to any communities shared by both anchors
     anchor1com <- InteractionSet::regions(loops)[

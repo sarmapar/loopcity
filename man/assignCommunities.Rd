@@ -8,7 +8,8 @@ assignCommunities(
   loops,
   scores,
   clusterType = "leiden",
-  leiden_resolution = 0.01
+  leiden_resolution = 0.01,
+  pruneUnder
 )
 }
 \arguments{
