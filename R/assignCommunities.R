@@ -115,9 +115,10 @@ assignCommunities <- function(loops,
                 pruneUnder <- intersectionPoint
             } else{
                 rlang::warn(glue("Optimal pruning threshold could not be found",
-                                 "setting `pruneUnder` to 0."))
-                pruneUnder <- 0
+                                 "setting `pruneUnder` to 1."))
+                pruneUnder <- 1
             }
+            message(paste0("Pruning all loops with a score less than ", pruneUnder))
 
         } else {
             ## error if no value provided and no added loops
@@ -240,6 +241,13 @@ assignCommunities <- function(loops,
 
     loops$loopCommunity <-
         mapply(function(x, y) intersect(x,y), anchor1com, anchor2com)
+
+    ## re-prune loops under the pruning value
+    loops$loopCommunity <- ifelse(loops$score >= pruneUnder,
+                                  loops$loopCommunity,
+                                  list(numeric(0)))
+
+    metadata(loops)$pruningValue <- pruneUnder
 
     return(loops)
 }
