@@ -14,20 +14,24 @@ Config/testthat/edition: 3
 RoxygenNote: 7.3.2
 Imports: 
     BiocGenerics,
+    clustAnalytics,
     data.table,
     dplyr,
+    GenomeInfoDb,
     GenomicRanges,
     glue,
     igraph,
     InteractionSet,
     IRanges,
     mariner,
+    methods,
+    plotgardener,
+    pROC,
+    plyranges,
     rlang,
     stats,
-    pROC,
-    GenomeInfoDb,
-    clustAnalytics
+    S4Vectors
 Depends: 
-    R (>= 2.10)
+    R (>= 3.5.0)
 LazyData: true
 URL: http://www.sarmapar.com/loopcity/
