@@ -21,6 +21,9 @@ if `loops` contains a column named 'score', this column will be used}
 \item{clusterType}{character vector of length 1 containing a keyword
 for the clustering algorithm to use. Must be one of "fast_greedy",
 "walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"}
+
+\item{pruneUnder}{numeric, all loops with scores less than this value will be
+removed}
 }
 \value{
 GInteractions object with community metadata
