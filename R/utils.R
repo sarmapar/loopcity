@@ -58,6 +58,9 @@
 #' @noRd
 #' @keywords internal
 .compareNodeToComm <- function(loops, borderNode, left){
+    ## Suppress NSE notes in R CMD check
+    queryHits <- loopCommunity <- comm <- score <- NULL
+
     ## Find loops that contain the borderNode (overlaps 1) and anchors in
     ## the neighboring community (overlaps 2)
     if(left){
