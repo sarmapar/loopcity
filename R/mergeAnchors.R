@@ -1,10 +1,18 @@
 #' Merge neighboring loop anchor positions into one
 #'  representative anchor.
+#'
+#'  The representative anchor is chosen as the mode of a set of
+#'  neighboring anchors. If there are no modes, the middle-most anchor of the
+#'  set of neighboring anchors is chosen. If there are multiple modes, the
+#'  middle-most anchor of the set of modes is chosen. In the case of an even
+#'  number in the set, the anchor at a higher genomic coordinate is chosen to
+#'  break ties.
 #' @param loops GInteractions object of loops from Hi-C data
 #' @param pixelOverlap numeric representing the number of
 #'  pixels away from an anchor is considered to be overlapping
 #'  For example, `pixelOverlap = 1` means only immediately neighboring pixels
-#'  will be merged and `pixelOverlap = 2` means all anchors within 2 pixels
+#'  will be merged and `pixelOverlap = 2` means all anchors within 2 pixels will
+#'  be merged
 #' @param dropDups logical determining whether duplicates should be dropped
 #'  from output
 #'
@@ -65,7 +73,7 @@ mergeAnchors <- function(loops, pixelOverlap, dropDups = T){
 
     ## helper function to pick the middle value of a vector
     ## (or the largest of 2 middle vals)
-    middle <- function(x) {x[length(x)/2 + 1]}
+    middle <- function(x) {x[floor(length(x)/2) + 1]}
 
     ## For each group of anchors, collect all anchor IDs with the maximum counts (modes)
     ## If there is only one mode, that is the representative anchor
