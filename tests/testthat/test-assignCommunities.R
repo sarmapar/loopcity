@@ -75,6 +75,7 @@ test_that("scores are checked correctly", {
         expect_error("must be a numeric vector")
 
     ## Providing scores overwrites `score` column in `loops`
+    ##TODO: this test isn't actually testing that the right scores are being used...
     test_scores_correct <- 1:length(loops_with_scores)
     assignCommunities(loops_with_scores, score = test_scores_correct) |>
         expect_s4_class("GInteractions")
