@@ -26,7 +26,7 @@ setGeneric("scoreInteractions",
                     bg = "bowtie",
                     bgGap = 0,
                     bgSize = 5,
-                    pseudo,
+                    pseudo = 5,
                     pruneUnder = 0,
                     truncate = F,
                     resolution,
@@ -60,42 +60,7 @@ setGeneric("scoreInteractions",
     ## Select background based on bg keyword
     bg_sel <- .pickSelection(bg, n = bgSize, buffer = buffer)
 
-    ## Calculate best pseudocounts if none are provided
-    # allow for range of pseudocounts to do optimization
-    if(missing(pseudo)){
-        ## by default, use 10th-90th deciles of counts for potential
-        ## pseudocounts
-        pseudo <- BiocGenerics::counts(x) |>
-            as.numeric() |>
-            quantile(seq(.1,.9,.1), na.rm=T) |>
-            unique()
-    }
-
-    if(length(pseudo) != 1){
-        if(missing(loopCalls)){
-            abort(c("`loopCalls` must be provided to optimize pseudocounts.",
-                    "i"="Either provide a single value for `pseudo`
-                    or provide a GInteractions object for `loopCalls`."))
-        }
-
-        if(length(pseudo) > 1){
-            pseudoValues <- pseudo
-            pseudo <- .optimizePseudocounts(values = pseudoValues,
-                                            mats = x,
-                                            fgSize = fgSize,
-                                            bg = bg,
-                                            bgGap = bgGap,
-                                            bgSize = bgSize,
-                                            loopCalls = loopCalls,
-                                            pruneUnder = pruneUnder,
-                                            truncate = truncate)
-        }
-
-        message(glue("{pseudo} pseudocounts added to raw counts,
-                for quality control info use `qc_scoreInteractions()`"))
-
-    }
-
+    ## Add pseudocounts to metadata
     x$pseudocounts <- pseudo
 
     ## Function to divide median of fg and bg with pseudocounts
@@ -107,8 +72,13 @@ setGeneric("scoreInteractions",
     scores <- mariner::calcLoopEnrichment(x = x, fg = cp_sel, bg = bg_sel,
                                           FUN = scoringFunction)
 
-    ## prune low scores
-    scores[which(as.logical(scores<=pruneUnder)),] <- 0
+    ## Prune away scores where the center pixels have
+    ## raw counts less than pruneUnder
+    centerPx <- mariner::calcLoopEnrichment(x = x,
+                                            fg = mariner::selectCenterPixel(
+                                                0, buffer = buffer),
+                                            FUN = function(fg,bg) fg)
+    scores[centerPx < pruneUnder] <- NA
 
     ## truncate high scores to 99th percentile
     if(truncate){
@@ -168,12 +138,10 @@ setGeneric("scoreInteractions",
                  bgGap = bgGap,
                  bgSize = bgSize,
                  pruneUnder = pruneUnder,
-                 truncate = truncate)
+                 truncate = truncate,
+                 pseudo = pseudo)
     if (!missing(loopCalls)){
         args$loopCalls <- loopCalls
-    }
-    if (!missing(pseudo)){
-        args$pseudo <- pseudo
     }
 
     do.call(".scoreInteractionsFromMats", args)
@@ -208,7 +176,8 @@ setGeneric("scoreInteractions",
 #' and used.
 #'  To optimize pseudocounts, `loopCalls` must be provided.
 #'  See also `qc_ScoreInteractions`
-#' @param pruneUnder numeric, all scores under this value will be set to 0
+#' @param pruneUnder numeric, all loops with raw counts less than this value
+#' will have score set to NA
 #' @param interactions GInteraction object of interactions from Hi-C data
 #' @param pseudo number of pseudo counts to add to raw Hi-C counts
 #' @param truncate logical indicating whether to set any values above
@@ -237,7 +206,7 @@ setMethod("scoreInteractions",
 
 #' Calculate loop enrichment over background.
 #'
-#' @rdname calcLoopEnrichment
+#' @rdname scoreInteractions
 #' @export
 setMethod("scoreInteractions",
           signature(x="InteractionArray",
