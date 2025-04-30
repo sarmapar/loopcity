@@ -2,12 +2,16 @@
 #'
 #' @param loops GInteractions object of interactions to include in the network
 #' @param scores a numeric vector of scores to use as edge weights,
-#'  if `loops` contains a column named 'score', this column will be used
+#' if `loops` contains a column named 'score', this column will be used
 #' @param clusterType character vector of length 1 containing a keyword
-#'  for the clustering algorithm to use. Must be one of "fast_greedy",
-#'  "walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"
+#' for the clustering algorithm to use. Must be one of "fast_greedy",
+#' "walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"
+#' @param leidenResolution numeric between 0 and 1, higher resolutions lead to
+#' more smaller communities, while lower resolutions lead to fewer larger
+#' communities. See `resolution_parameter` in `igraph::cluster_leiden`
 #' @param pruneUnder numeric, added loops with scores less than this value will
 #' be removed
+#'
 #' @return GInteractions object with community metadata
 #'
 #' @importFrom rlang abort
@@ -17,11 +21,18 @@
 #' @export
 #'
 #' @examples
-#' # Add example
+#' hicFile <- "inst/extdata/GM12878_chr22.hic"
+#'
+#' mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1) |>
+#'     connectLoopAnchors(1e6)
+#'
+#' scores <- scoreInteractions(connections, hicFile, mergedLoops)
+#'
+#' communities <- assignCommunities(interactions(scores))
 assignCommunities <- function(loops,
                               scores,
                               clusterType = "leiden",
-                              leiden_resolution = 0.1,
+                              leidenResolution = 0.1,
                               pruneUnder) {
 
     ## Suppress NSE notes in R CMD check
@@ -64,7 +75,8 @@ assignCommunities <- function(loops,
 
     ## Check that clusterType is valid
     possibleClusterTypes <- c("fast_greedy","walktrap", "leiden", "infomap",
-                              "label_prop", "edge_betweenness")
+                              "label_prop", "edge_betweenness",
+                              "connected_components")
     if(!clusterType %in% possibleClusterTypes){
         rlang::abort(c(glue("`clusterType`=\"{clusterType}\" is not a valid",
                      " clustering algorithm option"),
@@ -74,21 +86,21 @@ assignCommunities <- function(loops,
     }
 
     ## Check that leiden resolution is a numeric
-    if(!is(leiden_resolution, "numeric")){
-        rlang::abort(c("`leiden_resolution` must be numeric",
-                x=glue("`class(leiden_resolution)` is ",
-                       "{class(leiden_resolution)}")))
-    } else if(length(leiden_resolution) > 1){
-        rlang::warn(glue("More than one `leiden_resolution` provided, only",
+    if(!is(leidenResolution, "numeric")){
+        rlang::abort(c("`leidenResolution` must be numeric",
+                x=glue("`class(leidenResolution)` is ",
+                       "{class(leidenResolution)}")))
+    } else if(length(leidenResolution) > 1){
+        rlang::warn(glue("More than one `leidenResolution` provided, only",
                          " the first will be used"))
-        leiden_resolution <- leiden_resolution[1]
+        leidenResolution <- leidenResolution[1]
     }
 
-    ## Give a warning if leiden_resolution is provided but leiden is not
+    ## Give a warning if leidenResolution is provided but leiden is not
     ## used as clustering algorithm
     if(clusterType != "leiden"){
-        if("leiden_resolution" %in% names(call_args)){
-            rlang::warn(glue("`leiden_resolution` is provided but will not be",
+        if("leidenResolution" %in% names(call_args)){
+            rlang::warn(glue("`leidenResolution` is provided but will not be",
                              " used because `clusterType` is not \"leiden\""))
         }
     }
@@ -113,15 +125,8 @@ assignCommunities <- function(loops,
                                 "to keep all loops.")))
             }
 
-            ## Remove scores from any added loops with a score less than
-            ## the median score for original loops
+            ## set pruneUnder to the median score of original loops
             pruneUnder = median(originalLoops$score)
-
-            scores[scores < pruneUnder &
-                       loops$source == "original"] <- NA
-
-            message(paste0("Pruning added loops with a score less than ",
-                           pruneUnder))
 
         } else {
             ## error if no value provided and no source column
@@ -132,6 +137,14 @@ assignCommunities <- function(loops,
     }
 
 #### Build network -------------------------------------------------------------
+    ## Remove scores from any added loops with a score less than pruneUnder
+    scores[scores < pruneUnder &
+               loops$source == "added"] <- NA
+
+    message(paste0("Pruning added loops with a score less than ",
+                   pruneUnder))
+
+    ## Set nodes to anchors and edges to scores
     anc <- InteractionSet::anchors(loops, type="both", id=TRUE)
 
     relations = data.frame(from = anc$first,
@@ -155,7 +168,9 @@ assignCommunities <- function(loops,
         unique()
 
     for(chrom in chroms){
-        relations_chrom <- dplyr::filter(relations, chr == chrom)
+        # filter to loops in chromosome with scores above pruneUnder
+        relations_chrom <- dplyr::filter(relations,
+                                         chr == chrom)
         g <- igraph::graph_from_data_frame(relations_chrom,
                                            directed=FALSE)
 
@@ -189,7 +204,7 @@ assignCommunities <- function(loops,
                                               weights = relations_filter$weights,
                                               objective_function = "CPM",
                                               resolution_parameter =
-                                                  leiden_resolution,
+                                                  leidenResolution,
                                               n_iterations = 5),
                    infomap =
                        igraph::cluster_infomap(g_filter,
@@ -202,17 +217,24 @@ assignCommunities <- function(loops,
                    edge_betweenness =
                        igraph::cluster_edge_betweenness(g_filter,
                                                         weights = flippedWeights,
-                                                        directed = F)
+                                                        directed = F),
+                   connected_components =
+                       igraph::components(g_filter)
             )
+
+        ## put community numbers in genomic order
+        anchorCommunities <-
+            match(as.numeric(igraph::membership(between_g)),
+              unique(as.numeric(igraph::membership(between_g))))
 
         ## assign loop anchors to communities
         # add totalCommunities to assigned communities to ensure unique
         # community numbers
         InteractionSet::regions(loops)$anchorCommunity[
             as.numeric(names(igraph::membership(between_g)))] <-
-            as.numeric(igraph::membership(between_g) + totalCommunities)
+            anchorCommunities + totalCommunities
 
-        ## add number of new unique comminities to total communities
+        ## add number of new unique communities to total communities
         totalCommunities <- totalCommunities +
             length(unique(as.numeric(igraph::membership(between_g))))
     }
@@ -272,11 +294,9 @@ assignCommunities <- function(loops,
     loops$loopCommunity <-
         mapply(function(x, y) intersect(x,y), anchor1com, anchor2com)
 
-    ## re-prune loops under the pruning value
-    loops$loopCommunity <- ifelse(scores >= pruneUnder |
-                                      loops$source == "original",
-                                  loops$loopCommunity,
-                                  list(numeric(0)))
+    ## remove added loops under the pruning value
+    loops <- loops[which(loops$source == "original" |
+                             as.logical(scores >= pruneUnder))]
 
     S4Vectors::metadata(loops)$pruningValue <- pruneUnder
 
