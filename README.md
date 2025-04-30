@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# loopcity
+# loopcity <a href="http://www.sarmapar.com/loopcity/"><img src="man/figures/logo.png" align="right" width="150" style="padding-left:20px" alt="loopcity logo" /></a>
 
 <!-- badges: start -->
 <!-- badges: end -->
