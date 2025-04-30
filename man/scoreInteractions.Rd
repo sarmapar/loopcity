@@ -2,6 +2,7 @@
 % Please edit documentation in R/scoreInteractions.R
 \name{scoreInteractions,GInteractions,character-method}
 \alias{scoreInteractions,GInteractions,character-method}
+\alias{scoreInteractions,InteractionArray,missing-method}
 \title{Score loop counts using enrichment of foreground over background}
 \usage{
 \S4method{scoreInteractions}{GInteractions,character}(
@@ -12,11 +13,23 @@
   bg = "bowtie",
   bgGap = 0,
   bgSize = 5,
-  pseudo,
+  pseudo = 5,
   pruneUnder = 0,
   truncate = F,
   resolution,
   norm = "KR"
+)
+
+\S4method{scoreInteractions}{InteractionArray,missing}(
+  x,
+  loopCalls,
+  fgSize,
+  bg,
+  bgGap,
+  bgSize,
+  pseudo,
+  pruneUnder,
+  truncate
 )
 }
 \arguments{
@@ -42,7 +55,8 @@ shape}
 
 \item{pseudo}{number of pseudo counts to add to raw Hi-C counts}
 
-\item{pruneUnder}{numeric, all scores under this value will be set to 0}
+\item{pruneUnder}{numeric, all loops with raw counts less than this value
+will have score set to NA}
 
 \item{truncate}{logical indicating whether to set any values above
 the 99th percentile to the 99th percentile value}

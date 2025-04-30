@@ -8,7 +8,7 @@ assignCommunities(
   loops,
   scores,
   clusterType = "leiden",
-  leiden_resolution = 0.01,
+  leidenResolution = 0.1,
   pruneUnder
 )
 }
@@ -22,8 +22,12 @@ if `loops` contains a column named 'score', this column will be used}
 for the clustering algorithm to use. Must be one of "fast_greedy",
 "walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"}
 
-\item{pruneUnder}{numeric, all loops with scores less than this value will be
-removed}
+\item{leidenResolution}{numeric between 0 and 1, higher resolutions lead to
+more smaller communities, while lower resolutions lead to fewer larger
+communities. See `resolution_parameter` in `igraph::cluster_leiden`}
+
+\item{pruneUnder}{numeric, added loops with scores less than this value will
+be removed}
 }
 \value{
 GInteractions object with community metadata
@@ -32,5 +36,12 @@ GInteractions object with community metadata
 Assign communities to interactions
 }
 \examples{
-# Add example
+hicFile <- "inst/extdata/GM12878_chr22.hic"
+
+mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1) |>
+    connectLoopAnchors(1e6)
+
+scores <- scoreInteractions(connections, hicFile, mergedLoops)
+
+communities <- assignCommunities(interactions(scores))
 }

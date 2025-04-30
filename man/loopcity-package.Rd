@@ -6,6 +6,8 @@
 \alias{loopcity-package}
 \title{loopcity: Call Chromatin Communities From Hi-C Data}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Tools for assigning and visualizing chromatin community interactions from Hi-C data.
 }
 \seealso{

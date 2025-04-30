@@ -13,14 +13,19 @@ mergeAnchors(loops, pixelOverlap, dropDups = T)
 \item{pixelOverlap}{numeric representing the number of
 pixels away from an anchor is considered to be overlapping
 For example, `pixelOverlap = 1` means only immediately neighboring pixels
-will be merged and `pixelOverlap = 2` means all anchors within 2 pixels}
+will be merged and `pixelOverlap = 2` means all anchors within 2 pixels will
+be merged}
 
 \item{dropDups}{logical determining whether duplicates should be dropped
 from output}
 }
 \description{
-Merge neighboring loop anchor positions into one
- representative anchor.
+The representative anchor is chosen as the mode of a set of
+ neighboring anchors. If there are no modes, the middle-most anchor of the
+ set of neighboring anchors is chosen. If there are multiple modes, the
+ middle-most anchor of the set of modes is chosen. In the case of an even
+ number in the set, the anchor at a higher genomic coordinate is chosen to
+ break ties.
 }
 \examples{
 mergeAnchors(loops = GM12878_10KbLoops, pixelOverlap = 1)
