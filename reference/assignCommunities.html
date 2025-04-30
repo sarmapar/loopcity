@@ -40,7 +40,7 @@
 <span>  <span class="va">loops</span>,</span>
 <span>  <span class="va">scores</span>,</span>
 <span>  clusterType <span class="op">=</span> <span class="st">"leiden"</span>,</span>
-<span>  leiden_resolution <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>  leidenResolution <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  <span class="va">pruneUnder</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -64,9 +64,15 @@ for the clustering algorithm to use. Must be one of "fast_greedy",
 "walktrap", "leiden", "infomap", "label_prop", or "edge_betweenness"</p></dd>
 
 
+<dt id="arg-leidenresolution">leidenResolution<a class="anchor" aria-label="anchor" href="#arg-leidenresolution"></a></dt>
+<dd><p>numeric between 0 and 1, higher resolutions lead to
+more smaller communities, while lower resolutions lead to fewer larger
+communities. See `resolution_parameter` in `igraph::cluster_leiden`</p></dd>
+
+
 <dt id="arg-pruneunder">pruneUnder<a class="anchor" aria-label="anchor" href="#arg-pruneunder"></a></dt>
-<dd><p>numeric, all loops with scores less than this value will be
-removed</p></dd>
+<dd><p>numeric, added loops with scores less than this value will
+be removed</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -76,7 +82,16 @@ removed</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Add example</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hicFile</span> <span class="op">&lt;-</span> <span class="st">"inst/extdata/GM12878_chr22.hic"</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mergedLoops</span> <span class="op">&lt;-</span> <span class="fu"><a href="mergeAnchors.html">mergeAnchors</a></span><span class="op">(</span><span class="va">GM12878_10KbLoops</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="connectLoopAnchors.html">connectLoopAnchors</a></span><span class="op">(</span><span class="fl">1e6</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu">scoreInteractions</span><span class="op">(</span><span class="va">connections</span>, <span class="va">hicFile</span>, <span class="va">mergedLoops</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'scoreInteractions': object 'connections' not found</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">communities</span> <span class="op">&lt;-</span> <span class="fu">assignCommunities</span><span class="op">(</span><span class="fu">interactions</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in interactions(scores):</span> could not find function "interactions"</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
