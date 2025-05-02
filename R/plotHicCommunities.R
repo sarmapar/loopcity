@@ -1,13 +1,23 @@
-library(plotgardener)
-
-loopcityColors <- function(n){
-    baseColors <- c("chartreuse3", "deepskyblue3", "darkorange",
-                    "deeppink3", "darkorchid3")
-
-    return(rep(baseColors, length.out = n))
-}
-
-
+#' Plot Hi-C data with loops colored by community assignment.
+#'
+#' If a vector of starts and ends is provided, one page will be generated
+#' per region.
+#'
+#' @param pdfName a character string giving the file path. See the `file`
+#' parameter in `pdf()` for more information.
+#' @param communities GInteractions object containing loops to plot and a
+#' column called `loopCommunity` containing community assignments
+#' @param hicFile path to .hic file to plot
+#' @param chroms chromosome(s) of the region(s) to plot
+#' @param starts starting genomic location(s) of the region(s) to plot
+#' @param ends ending genomic location(s) of the region(s) to plot
+#' @param zmax a numeric value specifying the maximum range of hic scores to
+#' plot, where values greater than `zmax` will be set to`zmax`
+#' @param colorPalette a function corresponding to a color palette
+#'
+#' @export
+#'
+#' @examples
 plotHicCommunities <- function(pdfName, communities, hicFile,
                             chroms, starts, ends, zmax, colorPalette){
 #### parameter checking --------------------------------------------------------
@@ -168,5 +178,7 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
                                                 fill = windowLoops$color)
     }
     dev.off()
+
+    message(glue::glue("Plots created in "), pdfName)
 }
 
