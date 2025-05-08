@@ -98,19 +98,19 @@ test_that("scores are checked correctly", {
 })
 
 test_that("leiden_resolution checks work properly", {
-    ## Give a warning if leiden_resolution is provided but not used
+    ## Give a warning if leidenResolution is provided but not used
     assignCommunities(loops_with_scores,
                       clusterType = "fast_greedy",
-                      leiden_resolution = 0.5) |>
+                      leidenResolution = 0.5) |>
         expect_warning("will not be used")
 
     ## Give a warning if more than one resolution is provided
     assignCommunities(loops_with_scores,
-                      leiden_resolution = c(1,2,3)) |>
+                      leidenResolution = c(1,2,3)) |>
         expect_warning("first will be used")
 
-    ## Error if leiden_resolution is not numeric
+    ## Error if leidenResolution is not numeric
     assignCommunities(loops_with_scores,
-                      leiden_resolution = "test") |>
+                      leidenResolution = "test") |>
         expect_error("must be numeric")
 })
