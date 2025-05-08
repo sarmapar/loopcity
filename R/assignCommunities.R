@@ -23,12 +23,11 @@
 #' @examples
 #' hicFile <- "inst/extdata/GM12878_chr22.hic"
 #'
-#' mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1) |>
-#'     connectLoopAnchors(1e6)
-#'
+#' mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1)
+#' connections <- connectLoopAnchors(mergedLoops, 1e6)
 #' scores <- scoreInteractions(connections, hicFile, mergedLoops)
 #'
-#' communities <- assignCommunities(interactions(scores))
+#' assignCommunities(interactions(scores))
 assignCommunities <- function(loops,
                               scores,
                               clusterType = "leiden",
@@ -36,7 +35,7 @@ assignCommunities <- function(loops,
                               pruneUnder) {
 
     ## Suppress NSE notes in R CMD check
-    anchorCommunity <- NULL
+    anchorCommunity <- chr <- NULL
 
 ## Parameter checking ----------------------------------------------------------
     call_args <- match.call()

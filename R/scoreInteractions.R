@@ -196,7 +196,12 @@ setGeneric("scoreInteractions",
 #' @export
 #'
 #' @examples
-#' ## add examples here
+#' hicFile <- "inst/extdata/GM12878_chr22.hic"
+#'
+#' mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1)
+#' connections <- connectLoopAnchors(mergedLoops, 1e6)
+#'
+#' scoreInteractions(connections, hicFile, mergedLoops)
 #'
 setMethod("scoreInteractions",
           signature(x="GInteractions",
