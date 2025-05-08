@@ -38,9 +38,8 @@ Assign communities to interactions
 \examples{
 hicFile <- "inst/extdata/GM12878_chr22.hic"
 
-mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1) |>
-    connectLoopAnchors(1e6)
-
+mergedLoops <- mergeAnchors(GM12878_10KbLoops, 1)
+connections <- connectLoopAnchors(mergedLoops, 1e6)
 scores <- scoreInteractions(connections, hicFile, mergedLoops)
 
 communities <- assignCommunities(interactions(scores))
