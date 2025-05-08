@@ -84,11 +84,10 @@ be removed</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">hicFile</span> <span class="op">&lt;-</span> <span class="st">"inst/extdata/GM12878_chr22.hic"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">mergedLoops</span> <span class="op">&lt;-</span> <span class="fu"><a href="mergeAnchors.html">mergeAnchors</a></span><span class="op">(</span><span class="va">GM12878_10KbLoops</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="connectLoopAnchors.html">connectLoopAnchors</a></span><span class="op">(</span><span class="fl">1e6</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mergedLoops</span> <span class="op">&lt;-</span> <span class="fu"><a href="mergeAnchors.html">mergeAnchors</a></span><span class="op">(</span><span class="va">GM12878_10KbLoops</span>, <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">connections</span> <span class="op">&lt;-</span> <span class="fu"><a href="connectLoopAnchors.html">connectLoopAnchors</a></span><span class="op">(</span><span class="va">mergedLoops</span>, <span class="fl">1e6</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">scores</span> <span class="op">&lt;-</span> <span class="fu">scoreInteractions</span><span class="op">(</span><span class="va">connections</span>, <span class="va">hicFile</span>, <span class="va">mergedLoops</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in h(simpleError(msg, call)):</span> error in evaluating the argument 'x' in selecting a method for function 'scoreInteractions': object 'connections' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> File inst/extdata/GM12878_chr22.hic cannot be opened for reading.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">communities</span> <span class="op">&lt;-</span> <span class="fu">assignCommunities</span><span class="op">(</span><span class="fu">interactions</span><span class="op">(</span><span class="va">scores</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in interactions(scores):</span> could not find function "interactions"</span>
