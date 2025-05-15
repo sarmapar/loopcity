@@ -18,6 +18,7 @@
 #' @export
 #'
 #' @examples
+#' add example
 plotHicCommunities <- function(pdfName, communities, hicFile,
                             chroms, starts, ends, zmax, colorPalette){
 #### parameter checking --------------------------------------------------------
@@ -163,6 +164,7 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
         max_score <- max(windowLoops$score_lg)
 
         # plot arches
+        if(max_score > 0){
         arches <- plotgardener::plotPairsArches(windowLoops,
                                                 chrom = chr,
                                                 chromstart = start,
@@ -176,6 +178,7 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
                                                 height = archH,
                                                 width = plotW,
                                                 fill = windowLoops$color)
+        }
     }
     dev.off()
 

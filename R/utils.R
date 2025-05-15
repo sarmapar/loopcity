@@ -110,3 +110,11 @@
 
     return(borderNode)
 }
+
+##todo document
+loopcityColors <- function(n){
+    baseColors <- c("chartreuse3", "deepskyblue3", "darkorange",
+                    "deeppink3", "darkorchid3")
+
+    return(rep(baseColors, length.out = n))
+}
