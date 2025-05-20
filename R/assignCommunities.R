@@ -298,8 +298,12 @@ assignCommunities <- function(loops,
         mapply(function(x, y) intersect(x,y), anchor1com, anchor2com)
 
     ## remove added loops under the pruning value
-    loops <- loops[which(loops$source == "original" |
-                             as.logical(scores >= pruneUnder))]
+    if(!is.null(loops$source)){
+        loops <- loops[which(loops$source == "original" |
+                                 as.logical(scores >= pruneUnder))]
+    } else {
+        loops <- loops[which(as.logical(scores >= pruneUnder))]
+    }
 
     S4Vectors::metadata(loops)$pruningValue <- pruneUnder
 
