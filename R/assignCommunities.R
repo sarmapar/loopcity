@@ -137,8 +137,12 @@ assignCommunities <- function(loops,
 
 #### Build network -------------------------------------------------------------
     ## Remove scores from any added loops with a score less than pruneUnder
-    scores[scores < pruneUnder &
-               loops$source == "added"] <- NA
+    if(!is.null(loops$source)){
+        scores[scores < pruneUnder &
+                   loops$source == "added"] <- NA
+    } else {
+        scores[scores < pruneUnder] <- NA
+    }
 
     message(paste0("Pruning added loops with a score less than ",
                    pruneUnder))
