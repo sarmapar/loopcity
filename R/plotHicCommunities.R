@@ -117,7 +117,9 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
                                    "loops in annotated pixels or arches,",
                                    " no `source` column in `communities`."))
 
-            plotgardener::annoPixels(hicPlot, windowLoops)
+            tempLoops <- windowLoops
+            mcols(tempLoops) <- NULL
+            plotgardener::annoPixels(hicPlot, tempLoops)
 
             noSource = T
         } else {
