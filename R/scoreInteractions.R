@@ -21,7 +21,6 @@
 setGeneric("scoreInteractions",
            function(x,
                     hicFile,
-                    loopCalls,
                     fgSize = 0,
                     bg = "bowtie",
                     bgGap = 0,
@@ -30,7 +29,7 @@ setGeneric("scoreInteractions",
                     pruneUnder = 0,
                     truncate = F,
                     resolution,
-                    norm = "KR")
+                    norm = "NONE")
                standardGeneric("scoreInteractions"))
 
 
@@ -39,7 +38,7 @@ setGeneric("scoreInteractions",
 #' @importFrom mariner calcLoopEnrichment
 #' @noRd
 #' @keywords internal
-.scoreInteractionsFromMats <- function(x,loopCalls,fgSize,bg,bgGap,bgSize,
+.scoreInteractionsFromMats <- function(x,fgSize,bg,bgGap,bgSize,
                                        pseudo,pruneUnder,truncate){
 
     ## Get buffer from counts matrices
@@ -96,7 +95,7 @@ setGeneric("scoreInteractions",
 #' @importFrom mariner calcLoopEnrichment
 #' @noRd
 #' @keywords internal
-.scoreInteractionsFromFiles <- function(x,hicFile,loopCalls,fgSize,bg,bgGap,
+.scoreInteractionsFromFiles <- function(x,hicFile,fgSize,bg,bgGap,
                                         bgSize,pseudo,pruneUnder,truncate,
                                         resolution,norm){
 
@@ -140,9 +139,6 @@ setGeneric("scoreInteractions",
                  pruneUnder = pruneUnder,
                  truncate = truncate,
                  pseudo = pseudo)
-    if (!missing(loopCalls)){
-        args$loopCalls <- loopCalls
-    }
 
     do.call(".scoreInteractionsFromMats", args)
 }
@@ -158,8 +154,6 @@ setGeneric("scoreInteractions",
 #'  See also `mariner::pixelsToMatrices`
 #' @param file Character file paths to a `.hic` file. Required only if
 #'  GInteractions object is supplied for x.
-#' @param loopCalls GInteractions object containing "truth" loop calls for
-#' optimizing pseudocounts
 #'  See also `qc_scoreInteractions`
 #' @param fgSize manhattan distance surrounding center pixel to
 #'  include in foreground selection
@@ -169,13 +163,7 @@ setGeneric("scoreInteractions",
 #' @param bgGap number of pixels between foreground and background shapes
 #' @param bgSize Integer describing the width (in pixels) of the background
 #' shape
-#' @param pseudo Integer or integer vector of pseudocounts to add to raw counts.
-#'  If more than one value is provided, the optimal value will be determined
-#' and used.
-#'  If no value is provided, the optimal value between 1-200 will be determined
-#' and used.
-#'  To optimize pseudocounts, `loopCalls` must be provided.
-#'  See also `qc_ScoreInteractions`
+#' @param pseudo Numeric, number of pseudocounts to add to raw count
 #' @param pruneUnder numeric, all loops with raw counts less than this value
 #' will have score set to NA
 #' @param interactions GInteraction object of interactions from Hi-C data
