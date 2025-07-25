@@ -53,22 +53,29 @@
 </div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of loopcity is to provide modular functions to call and visualize chromatin interaction communities.</p>
+<p>While chromatin loops identified from Hi-C data are typically analyzed individually, growing evidence suggests they often organize into highly interconnected multi-loop communities that coordinate gene regulation, yet existing methods for detecting these structures have significant limitations including dependence on imprecise loop callers or requirements for specialized sequencing techniques. Loopcity addresses this gap as an R package designed to identify multi-loop communities from standard Hi-C chromatin interaction data, revealing higher-order patterns of 3D genome organization beyond individual loops.</p>
+<p><strong>loopcity</strong> takes Hi-C contact matrices and existing loop calls as input, then constructs weighted interaction networks where genomic anchors serve as nodes and loops as edges. Through a five-step pipeline involving anchor merging, loop connection detection, enrichment scoring, network pruning, and community detection using clustering algorithms like Leiden, loopcity identifies densely interconnected groups of genomic loci that may coordinate gene regulation. The package is designed for compatibility with existing Bioconductor workflows and includes visualization tools to display detected communities within Hi-C contact maps, making it a valuable resource for researchers investigating chromatin architecture, gene regulation, and the functional consequences of 3D genome organization across different cell types and organisms.</p>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p><em>publication coming soon</em></p>
+</div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>loopcity is currently being submitted to <a href="https://www.bioconductor.org/" class="external-link">Bioconductor</a>.</p>
 <p>You can install the development version of loopcity from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sarmapar/loopcity"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"sarmapar/loopcity"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.sarmapar.com/loopcity/">loopcity</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span></code></pre></div>
+<p><img src="articles/img/Fig1.png"><strong>Loopcity detects chromatin communities from Hi-C data.</strong> (a) Schematic overview of the main loopcity functions. (From top to bottom) Nearby anchors are merged to create network nodes, edges are added to connect all nearby nodes, edge weights are added based on enrichment over local background, edges with low weights are removed and chromatin communities are assigned using network clustering algorithms. (b) Contact frequency map of Hi-C data from K562 cells. Loops are annotated as black diamonds. Chromatin communities derived using a naive approach—where all loops with overlapping anchors are merged into a single community without anchor refinement—are shown via colored arches, with each color representing a different community. (b) The same Hi-C map is shown and loop annotations are depicted. Loops added by loopcity are annotated as grey diamonds. Chromatin communities derived using loopcity are shown via colored arches, with each color representing a different community.</p>
+<p>For a more detailed description of this workflow and it’s individual functions, see the Getting Started tab.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">
