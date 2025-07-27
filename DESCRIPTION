@@ -25,7 +25,7 @@ Imports:
     igraph,
     InteractionSet,
     IRanges,
-    mariner,
+    mariner (>= 1.2.0),
     methods,
     plotgardener,
     pROC,
@@ -33,6 +33,8 @@ Imports:
     rlang,
     stats,
     S4Vectors
+Remotes:
+    ericsdavis/mariner
 Depends: 
     R (>= 3.5.0)
 LazyData: true
