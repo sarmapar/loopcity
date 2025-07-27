@@ -3,6 +3,7 @@
 export(assignCommunities)
 export(connectLoopAnchors)
 export(mergeAnchors)
+export(plotHicCommunities)
 export(scoreInteractions)
 exportMethods(scoreInteractions)
 importFrom(BiocGenerics,"%in%")
