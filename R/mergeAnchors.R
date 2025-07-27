@@ -22,7 +22,7 @@
 #' mergeAnchors(loops = GM12878_10KbLoops, pixelOverlap = 1)
 #'
 
-mergeAnchors <- function(loops, pixelOverlap, dropDups = T){
+mergeAnchors <- function(loops, pixelOverlap = 1, dropDups = T){
     ## Suppress NSE notes in R CMD check
     subjectHits <- queryHits <- V1 <- anchorId <- overlapIds <- NULL
     sameGroup <- group <- count <- NULL
