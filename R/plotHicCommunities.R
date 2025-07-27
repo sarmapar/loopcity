@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' add example
-plotHicCommunities <- function(pdfName, communities, hicFile,
+plotHicCommunities <- function(pdfName, communities, hicFile, norm = "SCALE",
                             chroms, starts, ends, zmax, colorPalette){
 #### parameter checking --------------------------------------------------------
     ## if only one chromosome, replicate for each region
@@ -60,23 +60,23 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
         # params
         regions <- InteractionSet::regions(communities)
         regions <-regions[
-            seqnames(regions) == chr &
-                start(regions) >= start &
-                end(regions) <= end]
+            GenomicRanges::seqnames(regions) == chr &
+                GenomicRanges::start(regions) >= start &
+                GenomicRanges::end(regions) <= end]
 
         if(missing(zmax)){
             z = plotgardener::readHic(file = hicFile,
                                       chrom = chr,
                                       chromstart = start,
                                       chromend = end,
-                                      norm = "SCALE",
+                                      norm = norm,
                                       resolution = 10e3)
 
             if(nrow(z) > 0){
-                zmax = as.numeric(ceiling(quantile(z[z[,3] >= 10,3])[4])) + 200
+                zmax = as.numeric(ceiling(quantile(z[z[,3] >= 10,3])[4])) + 100
             } else{
                 zmax = 0
-                rlang::warn("`zmax` could not be calculated, please provide a value.")
+                rlang::abort("`zmax` could not be calculated, please provide a value.")
             }
         }
 
@@ -89,7 +89,7 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
                                                   chrom = chr,
                                                   chromstart = start,
                                                   chromend = end,
-                                                  norm = "SCALE",
+                                                  norm = norm,
                                                   resolution = 10e3,
                                                   zrange = c(0,zmax),
                                                   x = border,
@@ -118,7 +118,7 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
                                    " no `source` column in `communities`."))
 
             tempLoops <- windowLoops
-            mcols(tempLoops) <- NULL
+            S4Vectors::mcols(tempLoops) <- NULL
             plotgardener::annoPixels(hicPlot, tempLoops)
 
             noSource = T
@@ -126,14 +126,14 @@ plotHicCommunities <- function(pdfName, communities, hicFile,
             # annotating original loops
             originalLoops <- windowLoops[which(as.logical(
                 windowLoops$source == "original"))]
-            mcols(originalLoops) <- NULL
+            S4Vectors::mcols(originalLoops) <- NULL
 
             plotgardener::annoPixels(hicPlot, originalLoops)
 
             # annotating added loops
             addedLoops <- windowLoops[which(as.logical(
                 windowLoops$source == "added"))]
-            mcols(addedLoops) <- NULL
+            S4Vectors::mcols(addedLoops) <- NULL
 
             if(length(addedLoops) > 0){
                 plotgardener::annoPixels(hicPlot, addedLoops, col = "gray")
