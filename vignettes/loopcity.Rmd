@@ -154,5 +154,5 @@ plotHicCommunities(pdfName = "plot.pdf",
 ![](img/plot.png){width="100%"}
 
 ```{r}
-devtools::session_info()
+sessionInfo()
 ```
