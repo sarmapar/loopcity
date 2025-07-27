@@ -19,7 +19,8 @@ each given interaction."><meta property="og:image" content="http://www.sarmapar.
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/loopcity.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
       </ul></div>
@@ -46,7 +47,6 @@ each given interaction.</p>
 <span><span class="fu">scoreInteractions</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">hicFile</span>,</span>
-<span>  <span class="va">loopCalls</span>,</span>
 <span>  fgSize <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  bg <span class="op">=</span> <span class="st">"bowtie"</span>,</span>
 <span>  bgGap <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -55,21 +55,11 @@ each given interaction.</p>
 <span>  pruneUnder <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  truncate <span class="op">=</span> <span class="cn">F</span>,</span>
 <span>  <span class="va">resolution</span>,</span>
-<span>  norm <span class="op">=</span> <span class="st">"KR"</span></span>
+<span>  norm <span class="op">=</span> <span class="st">"NONE"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S4 method for class 'InteractionArray,missing'</span></span>
-<span><span class="fu">scoreInteractions</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  <span class="va">loopCalls</span>,</span>
-<span>  <span class="va">fgSize</span>,</span>
-<span>  <span class="va">bg</span>,</span>
-<span>  <span class="va">bgGap</span>,</span>
-<span>  <span class="va">bgSize</span>,</span>
-<span>  <span class="va">pseudo</span>,</span>
-<span>  <span class="va">pruneUnder</span>,</span>
-<span>  <span class="va">truncate</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">scoreInteractions</span><span class="op">(</span><span class="va">x</span>, <span class="va">fgSize</span>, <span class="va">bg</span>, <span class="va">bgGap</span>, <span class="va">bgSize</span>, <span class="va">pseudo</span>, <span class="va">pruneUnder</span>, <span class="va">truncate</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,12 +70,6 @@ each given interaction.</p>
 <dd><p>GInteractions object or InteractionArray object containing
 interactions of interest
  See also `mariner::pixelsToMatrices`</p></dd>
-
-
-<dt id="arg-loopcalls">loopCalls<a class="anchor" aria-label="anchor" href="#arg-loopcalls"></a></dt>
-<dd><p>GInteractions object containing "truth" loop calls for
-optimizing pseudocounts
- See also `qc_scoreInteractions`</p></dd>
 
 
 <dt id="arg-fgsize">fgSize<a class="anchor" aria-label="anchor" href="#arg-fgsize"></a></dt>
@@ -138,7 +122,8 @@ Required only if GInteractions object is supplied for x.</p></dd>
 
 <dt id="arg-file">file<a class="anchor" aria-label="anchor" href="#arg-file"></a></dt>
 <dd><p>Character file paths to a `.hic` file. Required only if
-GInteractions object is supplied for x.</p></dd>
+GInteractions object is supplied for x.
+See also `qc_scoreInteractions`</p></dd>
 
 
 <dt id="arg-interactions">interactions<a class="anchor" aria-label="anchor" href="#arg-interactions"></a></dt>
