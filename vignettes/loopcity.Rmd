@@ -39,7 +39,7 @@ While `loopcity` functions can be used in isolation, they are more powerful used
 If you have a `.txt` file of loop calls, these can be converted to a `GInteractions` object using the package `mariner`. Loopcity requires loop anchors to be binned to the same size, so loops can also be binned using `assignToBins` which accepts a loop file, BEDPE-formatted 'data.frame'-like object, or GInteractions object.
 
 ```{r preprocessLoops}
-loopFile <- "data/GM12878_10KbLoops.txt"
+loopFile <- "../data/GM12878_10KbLoops.txt"
 
 ## To read in loop file as-is, use `as_ginteractions`
 loops <- read.table(loopFile) |>
