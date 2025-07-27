@@ -60,7 +60,7 @@ Since loop calling can be imprecise, using loop anchors as-is can lead to multip
 mergedLoops <- mergeAnchors(loops)
 ```
 
-In this example, since one bin is 10Kb and `pixelOverlap` is 1 by default, all loop anchors within 1 pixel or 10Kb from each other will be grouped and merged into one representative anchor. The most common or the middle-most of these anchors is chosen as the new representative position for all neighboring anchors. Increasing `pixelOverlap` to `n` means all loop anchors within `n` pixels, or `n` * `binSize` base pairs will be merged into one position. 
+In this example, since one bin is 10Kb and `pixelOverlap` is 1 by default, all loop anchors within 1 pixel or 10Kb from each other will be grouped and merged into one representative anchor. The most common or the middle-most of these anchors is chosen as the new representative position for all neighboring anchors. Increasing `pixelOverlap` to `n` means all loop anchors within `n` pixels, or `n` \* `binSize` base pairs will be merged into one position.
 
 The output, `mergedLoops`, is a `GInteractions` object with all the same information from `loops` but with adjusted anchor positions.
 
@@ -71,7 +71,6 @@ mergedLoops
 ## Step 2: Add connections using `connectLoopAnchors`
 
 Since loop callers are limited to a binary classification of "loop" or "not a loop", we can instead create all possible loops and then create a threshold of what should be kept as a "true" loop based on a set of flexible parameters. The first step in this process is to create a set of all possible loops. The `connectLoopAnchors` function creates a new set of loops, connecting all anchors to every anchor within `overlapDist`. In this example, all anchors within 1Mb of each other are connected to create new loops.
-
 
 ```{r connectingAnchors}
 connections <- connectLoopAnchors(mergedLoops, overlapDist = 1e6)
@@ -85,9 +84,9 @@ connections
 
 ## Step 3: Score original and new loops using `scoreInteractions`
 
-These added and original connections are then scored based on the enrichment of the counts of the loop pixel compared to the local background. The shape and size of this local background can be customized using the parameters `bg` for the shape, and `bgSize`, `bgGap`, and `fgSize` for the size. 
+These added and original connections are then scored based on the enrichment of the counts of the loop pixel compared to the local background. The shape and size of this local background can be customized using the parameters `bg` for the shape, and `bgSize`, `bgGap`, and `fgSize` for the size.
 
-This normalizes contact counts between loop sizes, since shorter loops typically have higher raw counts. To account for noise in long range loops with low counts, a pseudocount value of 5 is added to all raw counts before calculating an enrichment score. This pseudocount value can be modified by changing the `pseudo` value. 
+This normalizes contact counts between loop sizes, since shorter loops typically have higher raw counts. To account for noise in long range loops with low counts, a pseudocount value of 5 is added to all raw counts before calculating an enrichment score. This pseudocount value can be modified by changing the `pseudo` value.
 
 ```{r scoringLoops}
 hicFile <- system.file("extdata", "GM12878_chr22.hic", package = "loopcity")
@@ -95,7 +94,9 @@ hicFile <- system.file("extdata", "GM12878_chr22.hic", package = "loopcity")
 scores <- scoreInteractions(connections,
                             hicFile = hicFile)
 ```
+
 This results in a new `InteractionArray` containing the scores for all interactions and metadata such as the name of the .hic file the counts came from and the number of pseudocounts added. To get just the `GInteraction` object with the new `score` column, we can run `interactions(scores)`
+
 ```{r scores}
 # the `scores` object is an 'InteractionArray' containing extra metadata information
 scores 
@@ -110,15 +111,16 @@ InteractionSet::interactions(scores)
 
 The `GInteractions` object stored inside `score` can then be used to assign communities. This function builds a network where the nodes are each loop anchor and the edge weights are the enrichment scores calculated in the previous step. By default, all loops with a score less than the median score of original loops are removed. This threshold is printed in a message and stored in the metadata of the output object in a variable called `pruningValue`. This value can be manually set by passing a value to the `pruneUnder` parameter.
 
-This network is then passed through a clustering algorithm. The default algorithm is leiden, but other options include "fast_greedy", "walktrap", "infomap", "label_prop", or "edge_betweenness". This assigns each loop anchor to a community, and any nodes that are closely bordering a neighboring community are evaluated to determine if they should be included in both communities. If the average score of the border anchor and all anchors in the neighboring community is greater than the average score of all interactions between all the anchors in the current community, then the anchor is assigned to both the original and neighboring community. Loops are assigned to a community if both anchors of the loop are in the same community. 
+This network is then passed through a clustering algorithm. The default algorithm is leiden, but other options include "fast_greedy", "walktrap", "infomap", "label_prop", or "edge_betweenness". This assigns each loop anchor to a community, and any nodes that are closely bordering a neighboring community are evaluated to determine if they should be included in both communities. If the average score of the border anchor and all anchors in the neighboring community is greater than the average score of all interactions between all the anchors in the current community, then the anchor is assigned to both the original and neighboring community. Loops are assigned to a community if both anchors of the loop are in the same community.
 
 ```{r }
 communities <- assignCommunities(InteractionSet::interactions(scores))
 ```
 
 To see the pruning value used to remove edges from the network, run the following code
+
 ```{r}
-#GenomicRanges::metadata(communities)$pruningValue
+S4Vectors::metadata(communities)$pruningValue
 ```
 
 ## Full Workflow
@@ -134,11 +136,11 @@ communities <- loops |>
     assignCommunities()
 ```
 
-
 ## Visualizing Communities
+
 We also provide a function to visualize these communities using the final `GInteractions` object returned from `assignCommunities` and a .hic file. This returns a pdf of the given region(s), with each region on each page. The figure contains a heatmap of hic counts with original loops annotated by black squares and added loops annotated by grey squares and arches with their height set to the calculated enrichment score colored by their assigned community.
 
-```{r plot}
+```{r plot, eval = F}
 plotHicCommunities(pdfName = "plot.pdf", 
                    communities = communities, 
                    hicFile = hicFile,
@@ -148,6 +150,8 @@ plotHicCommunities(pdfName = "plot.pdf",
                    ends = 30e6,
                    zmax = 10)
 ```
+
+![](img/plot.png){width="100%"}
 
 ```{r}
 devtools::session_info()
