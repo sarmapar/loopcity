@@ -8,7 +8,6 @@
 \S4method{scoreInteractions}{GInteractions,character}(
   x,
   hicFile,
-  loopCalls,
   fgSize = 0,
   bg = "bowtie",
   bgGap = 0,
@@ -17,29 +16,15 @@
   pruneUnder = 0,
   truncate = F,
   resolution,
-  norm = "KR"
+  norm = "NONE"
 )
 
-\S4method{scoreInteractions}{InteractionArray,missing}(
-  x,
-  loopCalls,
-  fgSize,
-  bg,
-  bgGap,
-  bgSize,
-  pseudo,
-  pruneUnder,
-  truncate
-)
+\S4method{scoreInteractions}{InteractionArray,missing}(x, fgSize, bg, bgGap, bgSize, pseudo, pruneUnder, truncate)
 }
 \arguments{
 \item{x}{GInteractions object or InteractionArray object containing
 interactions of interest
  See also `mariner::pixelsToMatrices`}
-
-\item{loopCalls}{GInteractions object containing "truth" loop calls for
-optimizing pseudocounts
- See also `qc_scoreInteractions`}
 
 \item{fgSize}{manhattan distance surrounding center pixel to
 include in foreground selection
@@ -72,7 +57,8 @@ for each file in `files`.
 Required only if GInteractions object is supplied for x.}
 
 \item{file}{Character file paths to a `.hic` file. Required only if
-GInteractions object is supplied for x.}
+GInteractions object is supplied for x.
+See also `qc_scoreInteractions`}
 
 \item{interactions}{GInteraction object of interactions from Hi-C data}
 }

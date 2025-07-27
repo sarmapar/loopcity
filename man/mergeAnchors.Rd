@@ -5,7 +5,7 @@
 \title{Merge neighboring loop anchor positions into one
  representative anchor.}
 \usage{
-mergeAnchors(loops, pixelOverlap, dropDups = T)
+mergeAnchors(loops, pixelOverlap = 1, dropDups = T)
 }
 \arguments{
 \item{loops}{GInteractions object of loops from Hi-C data}

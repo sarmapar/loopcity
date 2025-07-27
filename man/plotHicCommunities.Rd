@@ -8,6 +8,7 @@ plotHicCommunities(
   pdfName,
   communities,
   hicFile,
+  norm = "SCALE",
   chroms,
   starts,
   ends,
@@ -38,4 +39,7 @@ plot, where values greater than `zmax` will be set to`zmax`}
 \description{
 If a vector of starts and ends is provided, one page will be generated
 per region.
+}
+\examples{
+add example
 }
