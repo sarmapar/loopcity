@@ -38,5 +38,7 @@ Remotes:
 Depends: 
     R (>= 3.5.0)
 LazyData: true
-URL: http://www.sarmapar.com/loopcity/
+URL: 
+    https://sarmapar.com/loopcity/,
+    https://github.com/sarmapar/loopcity
 VignetteBuilder: knitr
