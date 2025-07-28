@@ -33,7 +33,7 @@ remotes::install_github("sarmapar/loopcity")
 
 ## Overview
 
-![](vignettes/img/Fig1.png)
+![](man/figures/Fig1.png)
 **Loopcity detects chromatin communities from Hi-C data.** (a) Schematic overview of the main loopcity functions. (From top to bottom) Nearby anchors are merged to create network nodes, edges are added to connect all nearby nodes, edge weights are added based on enrichment over local background, edges with low weights are removed and chromatin communities are assigned using network clustering algorithms. (b) Contact frequency map of Hi-C data from K562 cells. Loops are annotated as black diamonds. Chromatin communities derived using a naive approach—where all loops with overlapping anchors are merged into a single community without anchor refinement—are shown via colored arches, with each color representing a different community. (b) The same Hi-C map is shown and loop annotations are depicted. Loops added by loopcity are annotated as grey diamonds. Chromatin communities derived using loopcity are shown via colored arches, with each color representing a different community.
 
 
